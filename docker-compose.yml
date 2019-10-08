@@ -1,0 +1,30 @@
+version: '2'
+services:
+
+  adminer:
+    build:
+      context: dockers/adminer
+    ports:
+      - "8080:8080"
+    links:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=i4MTHEADMIN!
+      - MSSQL_PID=Developer
+#    volumes:
+#      - <path>:/var/opt/mssql:rw # To persist data
+
+  web:
+    build:
+      context: dockers/php
+    ports:
+      - "8081:80"
+    links:
+      - db
+    volumes:
+      - ./services/web/dist:/var/www/html:ro
+
